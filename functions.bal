@@ -8,7 +8,7 @@ isolated function validatePayload(ServicerequestsPayload payload) returns error?
     if !payload.requesterEmail.includes("@") {
         return error("Validation failed: 'requesterEmail' must be a valid email address");
     }
-    if payload.customerId <= 0 {
+    if payload.customerId.trim().length() == 0{
         return error("Validation failed: 'customerId' must be a positive integer");
     }
     if payload.category.trim().length() == 0 {

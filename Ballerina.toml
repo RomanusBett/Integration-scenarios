@@ -1,0 +1,9 @@
+[package]
+org = "jamiseon"
+name = "integration_scenarios"
+version = "0.1.0"
+distribution = "2201.13.4"
+title = "integration-scenarios"
+
+[build-options]
+sticky = true

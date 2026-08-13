@@ -1,0 +1,26 @@
+name: WSO2 CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ballerina
+        uses: ballerina-platform/setup-ballerina@v1
+        with:
+          version: "2201.13.4"
+
+      - name: Run tests
+        run: bal test
+
+      - name: Build project
+        run: bal build

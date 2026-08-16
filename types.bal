@@ -8,3 +8,11 @@ type ServicerequestsPayload record {|
     string description;
     string priority;
 |};
+
+// Output type for the LLM analysis block
+type LlmAnalysis record {|
+    string suggestedCategory;
+    string urgencyLevel;
+    string summary;
+    string suggestedResponse;
+|};

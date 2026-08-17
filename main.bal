@@ -14,9 +14,7 @@ service / on httpDefaultListener {
                     }
                 };
             }
-            // Step 6: Direct LLM Call block
-            LlmAnalysis llmAnalysis = check modelProvider->generate(
-                `You are a customer support assistant. Analyze the following service request and return a structured analysis.
+            LlmAnalysis SentimentResult = check aiWso2modelprovider->generate(`You are a customer support assistant. Analyze the following service request and return a structured analysis.
                 
                 Requester: ${payload.requesterName}
                 Category: ${payload.category}
@@ -31,17 +29,15 @@ service / on httpDefaultListener {
                   "urgencyLevel": "<one of: LOW, MEDIUM, HIGH, or CRITICAL>",
                   "summary": "<a one-sentence summary of the issue>",
                   "suggestedResponse": "<a professional first-response message to send to the customer>"
-                }`
-            );
+                }`);
 
-            // TODO: Step 7 — Data Mapper goes here
             return {
                 status: "analyzed",
                 customerId: payload.customerId,
-                suggestedCategory: llmAnalysis.suggestedCategory,
-                urgencyLevel: llmAnalysis.urgencyLevel,
-                summary: llmAnalysis.summary,
-                suggestedResponse: llmAnalysis.suggestedResponse
+                suggestedCategory: SentimentResult.suggestedCategory,
+                urgencyLevel: SentimentResult.urgencyLevel,
+                summary: SentimentResult.summary,
+                suggestedResponse: SentimentResult.suggestedResponse
             };
         } on fail error err {
             return error("unhandled error", err);

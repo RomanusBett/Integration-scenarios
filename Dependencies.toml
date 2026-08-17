@@ -5,7 +5,7 @@
 
 [ballerina]
 dependencies-toml-version = "2"
-distribution-version = "2201.13.4"
+distribution-version = "2201.13.5"
 
 [[package]]
 org = "ballerina"
@@ -374,28 +374,12 @@ dependencies = [
 ]
 
 [[package]]
-org = "ballerinax"
-name = "ai.ollama"
-version = "1.2.4"
-dependencies = [
-	{org = "ballerina", name = "ai"},
-	{org = "ballerina", name = "data.jsondata"},
-	{org = "ballerina", name = "http"},
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "lang.array"}
-]
-modules = [
-	{org = "ballerinax", packageName = "ai.ollama", moduleName = "ai.ollama"}
-]
-
-[[package]]
 org = "jamiseon"
 name = "integration_scenarios"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "ai"},
-	{org = "ballerina", name = "http"},
-	{org = "ballerinax", name = "ai.ollama"}
+	{org = "ballerina", name = "http"}
 ]
 modules = [
 	{org = "jamiseon", packageName = "integration_scenarios", moduleName = "integration_scenarios"}

@@ -9,7 +9,6 @@ type ServicerequestsPayload record {|
     string priority;
 |};
 
-// Output type for the LLM analysis block
 type LlmAnalysis record {|
     string suggestedCategory;
     string urgencyLevel;

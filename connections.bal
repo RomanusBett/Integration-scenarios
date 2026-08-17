@@ -1,3 +1,3 @@
-import ballerinax/ai.ollama;
+import ballerina/ai;
 
-final ollama:ModelProvider modelProvider = check new (modelType = "llama3");
+final ai:Wso2ModelProvider aiWso2modelprovider = check ai:getDefaultModelProvider();

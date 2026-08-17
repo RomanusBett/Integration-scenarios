@@ -3,8 +3,9 @@ import ballerina/http;
 listener http:Listener httpDefaultListener = http:getDefaultListener();
 
 service / on httpDefaultListener {
-    resource function post servicerequests(@http:Payload ServicerequestsPayload payload) returns json|http:BadRequest|error {
+    resource function post servicerequests(@http:Payload ServicerequestsPayload payload) returns AcknowledgmentResponse|http:BadRequest|error {
         do {
+            // Step 1 — Validate the incoming payload
             error? validationResult = validatePayload(payload);
             if validationResult is error {
                 return <http:BadRequest>{
@@ -14,7 +15,8 @@ service / on httpDefaultListener {
                     }
                 };
             }
-            LlmAnalysis SentimentResult = check aiWso2modelprovider->generate(`You are a customer support assistant. Analyze the following service request and return a structured analysis.
+
+            LlmAnalysis llmAnalysis = check aiWso2modelprovider->generate(`You are a customer support assistant. Analyze the following service request and return a structured analysis.
                 
                 Requester: ${payload.requesterName}
                 Category: ${payload.category}
@@ -31,14 +33,14 @@ service / on httpDefaultListener {
                   "suggestedResponse": "<a professional first-response message to send to the customer>"
                 }`);
 
-            return {
-                status: "analyzed",
-                customerId: payload.customerId,
-                suggestedCategory: SentimentResult.suggestedCategory,
-                urgencyLevel: SentimentResult.urgencyLevel,
-                summary: SentimentResult.summary,
-                suggestedResponse: SentimentResult.suggestedResponse
-            };
+            TicketPayload ticketPayload = transformToTicketPayload(payload, llmAnalysis);
+
+            EnrichedTicketPayload enrichedPayload = enrichTicketPayload(ticketPayload);
+
+            BackendTicketResponse backendResponse = check ticketingBackendClient->post("/tickets", enrichedPayload);
+
+            AcknowledgmentResponse acknowledgmentResponse = buildAcknowledgmentResponse(backendResponse, ticketPayload.aiAnalysis);
+            return acknowledgmentResponse;
         } on fail error err {
             return error("unhandled error", err);
         }
